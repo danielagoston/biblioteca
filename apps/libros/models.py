@@ -44,6 +44,8 @@ class Libro(models.Model):
     
     
 
+    #el class Meta por convención en python es utilizado para definir el comportamiento
+    #de otras clases, personalizan el comportamiento de por ejemplo Libro en este caso
     class Meta:
         verbose_name = 'Libro'
         verbose_name_plural = 'Libros'
