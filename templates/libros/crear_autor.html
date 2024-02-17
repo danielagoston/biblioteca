@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creación de Autores</title>
-</head>
-<body>
-   <form method="POST">
+{% extends 'index.html' %}
+{% block titulo %}
+    Creación de autor
+{% endblock titulo %}
+{% block body %}
+<form method="POST">    
     {% csrf_token %}
-            {{ autor_form.as_p }}
-            <button type="submit">Crear</button>
-   </form> 
-</body>
-</html>
+    {{ autor_form.as_p }}
+    <button type="submit">Crear</button>
+</form>
+
+{% endblock body %}
