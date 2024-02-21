@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from .forms import AutorForm
 from .models import Autor
 
@@ -25,31 +26,55 @@ def crearAutor(request):
     return render(request, 'libros/crear_autor.html', {'autor_form': autor_form})
 
 def listarAutor(request):
-    # Obtiene todos los objetos Autor de la base de datos.
-    autores = Autor.objects.all()
+    # Recupera todos los autores cuyo estado sea verdadero (activo) desde la base de datos.
+    autores = Autor.objects.filter(estado=True)
     
-    # Renderiza la plantilla 'libros/listar_autor.html' y pasa la lista de autores como contexto.
+    # Renderiza la plantilla 'listar_autor.html' y pasa la lista de autores recuperados como contexto.
     return render(request, 'libros/listar_autor.html', {'autores': autores})
 
 
 def editarAutor(request, id):
-    # Obtiene el objeto Autor correspondiente al ID proporcionado en la URL.
+    # Inicialización de variables
+    autor_form = None
+    error = None
+    try:
+        # Intenta obtener el autor de la base de datos usando su ID
+        autor = Autor.objects.get(id=id)
+
+        # Si la solicitud es de tipo GET, muestra el formulario con los datos actuales del autor
+        if request.method == 'GET':
+            autor_form = AutorForm(instance=autor)
+        else:
+            # Si la solicitud es de tipo POST, procesa el formulario enviado por el usuario
+            autor_form = AutorForm(request.POST, instance=autor)
+            # Si el formulario es válido, guarda los cambios en la base de datos y redirige al usuario a la página de índice
+            if autor_form.is_valid():
+                autor_form.save()
+                return redirect('index')
+    # Maneja la excepción en caso de que el autor no exista
+    except ObjectDoesNotExist as e:
+        error = e
+     
+    # Renderiza el template 'libros/crear_autor.html' con el formulario del autor y el mensaje de error (si hay alguno)
+    return render(request, 'libros/crear_autor.html', {'autor_form': autor_form,'error':error})
+
+def eliminarAutor(request, id):
+    # Obtiene el autor correspondiente al ID proporcionado desde la base de datos.
     autor = Autor.objects.get(id=id)
     
-    # Comprueba si la solicitud es de tipo GET.
-    if request.method == 'GET':
-        # Si la solicitud es GET, crea un formulario de Autor con los datos del autor obtenido.
-        autor_form = AutorForm(instance=autor)
-    else:
-        # Si la solicitud no es GET (probablemente POST), crea un formulario de Autor con los datos proporcionados en la solicitud.
-        autor_form = AutorForm(request.POST, instance=autor)
-        # Comprueba si el formulario es válido.
-        if autor_form.is_valid():
-            # Si el formulario es válido, guarda los cambios en el objeto Autor.
-            autor_form.save()
-            # Redirige al usuario a la página de índice (o cualquier otra página que desees).
-            return redirect('index')
-    
-    # Renderiza la plantilla 'libros/crear_autor.html' y pasa el formulario de autor como contexto.
-    return render(request, 'libros/crear_autor.html', {'autor_form': autor_form})
+    # Verifica si la solicitud es de tipo POST (es decir, si se ha enviado el formulario de eliminación).
+    if request.method == 'POST':
+        # Elimina el autor de la base de datos.
+        #autor.delete()
+        
+        # Cambia el estado del autor a Falso.
+        autor.estado = False
+        # Guarda el cambio en la base de datos.
+        autor.save()
+        # Redirige al usuario a la vista listar_autor después de "eliminar" el autor.
 
+        # Redirige al usuario a la vista listar_autor después de eliminar el autor.
+        return redirect('libros:listar_autor')
+    
+    # Si la solicitud no es de tipo POST, renderiza la plantilla 'eliminar_autor.html' con los datos del autor.
+    return render(request,'libros/eliminar_autor.html',{'autor':autor})

@@ -13,6 +13,7 @@ class Autor(models.Model):
     nacionalidad = models.CharField(max_length = 100, blank = False, null = False)
     #textfield es un campo de texto extenso por eso no se aclara cuantos caracteres
     descripcion = models.TextField(blank = False, null = False)
+    estado = models.BooleanField(default = True)
     fecha_creacion = models.DateField(auto_now = True, auto_now_add = False)
 
     class Meta:

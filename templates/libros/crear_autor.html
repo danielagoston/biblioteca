@@ -5,8 +5,20 @@
 {% block body %}
 <form method="POST">    
     {% csrf_token %}
-    {{ autor_form.as_p }}
-    <button type="submit">Crear</button>
+    {% if error %}
+        <h2>{{ error }}</h2>
+    {% else %}
+        <label>Nombres</label>
+        <input type="text" name="nombre">
+        <label>Apellidos</label>
+        <input type="text" name="apellidos">
+        <label>Nacionalidad</label>
+        <input type="text" name="nacionalidad">
+        <label>Descripción</label>
+        <input type="text" name="descripcion">
+
+        <button type="submit">Crear</button>
+    {% endif %}  
 </form>
 
 {% endblock body %}

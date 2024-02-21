@@ -15,6 +15,7 @@
                     <th>Apellidos</th>
                     <th>Nacionalidad</th>
                     <th>Descripción</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,10 @@
                         <td>{{ autor.nombre }}</td>
                         <td>{{ autor.nacionalidad }}</td>
                         <td>{{ autor.descripcion }}</td>
+                        <td>
+                            <a href="{% url 'libros:editar_autor' autor.id %}">Editar</a>
+                            <a href="{% url 'libros:eliminar_autor' autor.id %}">Eliminar</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
