@@ -15,11 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from apps.libros.views import Home
+from apps.libro.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #a través de esta url yo conecto el urls.py de libros, y esta busca ahí la url correspondiente
-    path('libros/', include(('apps.libros.urls', 'libros'))),
-    path('home/', Home, name = 'index' )
+    path('libro/',include(('apps.libro.urls','libro'))),
+    path('',home, name = 'index')
 ]
