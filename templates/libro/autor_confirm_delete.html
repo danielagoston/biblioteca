@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block titulo %}
+  Biblioteca Aguará | Confirmación de Eliminación
+{% endblock titulo %}
+
+{% block body %}
+<form method="post">
+    {% csrf_token %}
+    <p><strong>¿Desea eliminar a {{ autor.nombre }}, {{ autor.apellidos }}?</strong></p>
+    <button type="submit" class="btn btn-danger">Confirmar</button>
+</form>
+{% endblock body %}
