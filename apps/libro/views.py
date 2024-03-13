@@ -2,9 +2,8 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import AutorForm
 from .models import Autor
-from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
 
 
 class Inicio(TemplateView):
